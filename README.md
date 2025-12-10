@@ -14,8 +14,8 @@
 ## Tests
 
 ## Structure du projet: Deployez un modele de ML
- -src
- -tests
+ #src
+ #tests
 
  
  
