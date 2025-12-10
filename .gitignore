@@ -1,0 +1,6 @@
+
+*.pdf
+*.lock
+__pycache__/
+*.pyc
+.env
