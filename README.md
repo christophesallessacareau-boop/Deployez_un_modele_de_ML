@@ -4,15 +4,12 @@
 ## Pré-requis
 - Python
 -
--
 
 ## Installation
 -installation d'un environnement virtuel
 -installation des dépendances (cf requirements.txt)
 
 ## Configuration
-
-##
 
 ## Tests
 
