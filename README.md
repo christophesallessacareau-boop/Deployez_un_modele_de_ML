@@ -16,8 +16,7 @@
 
 ## Tests
 
-## Structure du projet
--Deployez un modele de ML
+## Structure du projet: Deployez un modele de ML
  -src # code source
  -tests #tests unitaires
 
