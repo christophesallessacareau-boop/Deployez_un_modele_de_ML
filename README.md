@@ -12,10 +12,16 @@
 ## Configuration
 
 ## Tests
+-sur branche main et branche develop
+-à chaque push et pull
 
 ## Structure du projet: Deployez un modele de ML
  #src
  #tests
+
+ ##Lancer une application Gradio
+ -pip install -r requirements.txt
+ -python app.py
 
  
  
