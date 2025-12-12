@@ -1,4 +1,4 @@
-# on teste que nous avons bien les bonnes colonnes numériques
+# on teste que nous avons bien les bonnes colonnes numériques et le bon nombre de ces colonnes numériques
 from src.def_fonction_a_tester import get_numeric_columns
 class TestGetNumericColumns:
     """Tests pour la fonction get_numeric_columns"""
