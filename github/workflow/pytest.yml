@@ -32,12 +32,21 @@ jobs:
         #last version v4 is now more efficient
         uses: actions/checkout@v4
 
-      #test on several version of Python
+      # tests on several versions of Python
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
+
+      # Mise en cache des dépendances pip (pour accélèrer les builds)
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Install dependencies
         # exécution de plusieurs commandes shell
@@ -52,5 +61,6 @@ jobs:
           # affichage des résultats avec détails (nom de chaque test et statut)
       - name: Run tests with pytest
         run: PYTHONPATH=. pytest -v
+
 
 
