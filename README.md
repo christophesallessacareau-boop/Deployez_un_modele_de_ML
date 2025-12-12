@@ -16,12 +16,12 @@
 -à chaque push et pull
 
 ## Structure du projet: Deployez un modele de ML
- #src
- #tests
+-src
+-tests
 
- ##Lancer une application Gradio
- -pip install -r requirements.txt
- -python app.py
+##Lancer une application Gradio
+#pip install -r requirements.txt
+#python gradio.app.py
 
  
  
