@@ -7,8 +7,8 @@ import numpy as np
 # Charger le modèle
 model = joblib.load('model.joblib')
 
-# Chargement du preprocesseur 
-ColumnTransformer= joblib.load('preprocessor.joblib')
+# Chargement du preprocesseur normalement inutile car le pipeline s'en charge automatiquement
+## (sinon) ColumnTransformer= joblib.load('preprocessor.joblib')
 
 values = [
     augementation_salaire_precedente, frequence_deplacement,
@@ -59,8 +59,8 @@ def predict(values):
     
     input_data = pd.DataFrame([dict(zip(features, values))])
     
-    # Application du preprocessing
-    input_data = ColumnTransformer.transform(input_data)
+    # Application du preprocessing (normalement inutile car le pipeline s'en charge automatiquement)
+    ## (sinon) input_data = ColumnTransformer.transform(input_data)
     
     # Faire la prédiction
     prediction = model.predict(input_data)[1]
