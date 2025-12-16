@@ -1,35 +1,30 @@
-# Deployez un modele de ML
-## projet: classifiez_automatiqement_des_informations
-## Modele de regression logistique en classification équilibrée avec SMOTE
-## Modèle entraîné sur un dataset de volume de démissions en entreprise
+Application de Prédiction Machine Learning
+Cette application utilise un modèle de régression logistique optimisé avec GridSearchCV pour faire des prédictions.
+Fonctionnalités
 
-# Pré-requis
-## Python
-## 
+Prédiction en temps réel
+Interface interactive avec Gradio
+Modèle entraîné avec pipeline complet (preprocessing + modèle)
 
-# Installation
-## installation d'un environnement virtuel
-## installation des dépendances (cf requirements.txt)
-## création d'un compte GitHub
-## création d'un compte HuggingFace Spaces
+Utilisation
 
-# Configuration
+Remplissez les champs avec les valeurs des features
+Cliquez sur "Prédire"
+Consultez les résultats et probabilités
 
-# Tests
-## sur branche main et branche develop
-## à chaque push et pull
-## test sur les noms et nombre de colonnes du dataset
+Modèle
 
-# Structure du projet: 
-## src
-## tests
-## app.py
+Algorithme : Régression Logistique avec GridSearchCV
+Preprocessing : Pipeline avec ColumnTransformer (encoders + RobustScaler)
+Métrique : ROC-AUC
+Validation : StratifiedKFold Cross-Validation
 
-# Lancer une application Gradio
-## pip install -r requirements.txt
-## python gradio.app.py
-## Gradio va demander d'entrer les valeurs des features
-## Gradio retourne les valeurs prédites
+Technologies
+
+Python
+Scikit-learn
+Gradio
+Joblib
 
  
  
