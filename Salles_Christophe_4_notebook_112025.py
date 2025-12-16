@@ -2221,7 +2221,6 @@ print(" Modèle sauvegardé avec succès dans 'model.joblib'")
 loaded_model = joblib.load('model.joblib')
 test_pred = loaded_model.predict(X_final_test[:1])
 print(f" Test de prédiction: {test_pred}")
-print(f"Taille du fichier: {os.path.getsize('model.joblib') / 1024 / 1024:.2f} MB")
 print(" Modèle rechargé avec succès pour vérification")
 
 # Vérification du meilleur score
