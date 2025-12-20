@@ -1,4 +1,4 @@
-# Application Gradio
+# Application Gradio (framework) 
 import gradio as gr
 import joblib
 import pandas as pd
@@ -11,23 +11,12 @@ model = joblib.load('model.joblib')
 ## (sinon) ColumnTransformer= joblib.load('preprocessor.joblib')
 
 values = [
-    augementation_salaire_precedente, frequence_deplacement,
-    heure_supplementaires, genre, statut_marital_Divorcé_e,
-    statut_marital_Marié_e, departement_Consulting,
-    departement_RH, poste_Cadre_Commercial, poste_Consultant,
-    poste_Directeur_Technique, poste_Manager,
-    poste_Representant_Commercial, poste_RH,
-    poste_Senior_Manager, poste_Tech_Lead,
-    domaine_etude_Entrepreunariat, domaine_etude_Infra_Cloud,
-    domaine_etude_Marketing, domaine_etude_RH,
-    domaine_etude_Transformation_Digitale,
-    satisfaction_employee_environnement, note_evaluation_precedente,
-    satisfaction_employee_nature_travail, satisfaction_employee_equipe,
-    satisfaction_employee_equilibre_pro_perso, note_evaluation_actuelle,
-    age, revenu_mensuel, nombre_experiences_precedentes,
-    annees_dans_l_entreprise, nombre_participation_pee,
-    nb_formations_suivies, distance_domicile_travail,
-    niveau_education, annees_depuis_la_derniere_promotion
+    satisfaction_employee_environnement, note_evaluation_precedente, satisfaction_employee_nature_travail,
+          satisfaction_employee_equipe, satisfaction_employee_equilibre_pro_perso, id_employee, note_evaluation_actuelle,
+          heure_supplementaires, augmentation_salaire_precedente, age, genre, revenu_mensuel, statut_marital, departement,
+          poste, nombre_experiences_precedentes, annees_dans_l_entreprise,
+          nombre_participation_pee, nb_formations_suivies, distance_domicile_travail, niveau_education, domaine_etude,
+          frequence_deplacement, annees_depuis_la_derniere_promotion, categorie_revenu
 ]
 
 def predict(values):
@@ -38,23 +27,12 @@ def predict(values):
     # Créer un DataFrame avec les features
 
     features = [
-    'augementation_salaire_precedente', 'frequence_deplacement',
-    'heure_supplementaires', 'genre', 'statut_marital_Divorcé(e)',
-    'statut_marital_Marié(e)', 'departement_Consulting',
-    'departement_Ressources Humaines', 'poste_Cadre Commercial',
-    'poste_Consultant', 'poste_Directeur Technique', 'poste_Manager',
-    'poste_Représentant Commercial', 'poste_Ressources Humaines',
-    'poste_Senior Manager', 'poste_Tech Lead',
-    'domaine_etude_Entrepreunariat', 'domaine_etude_Infra & Cloud',
-    'domaine_etude_Marketing', 'domaine_etude_Ressources Humaines',
-    'domaine_etude_Transformation Digitale',
-    'satisfaction_employee_environnement', 'note_evaluation_precedente',
-    'satisfaction_employee_nature_travail', 'satisfaction_employee_equipe',
-    'satisfaction_employee_equilibre_pro_perso', 'note_evaluation_actuelle',
-    'age', 'revenu_mensuel', 'nombre_experiences_precedentes',
-    'annees_dans_l_entreprise', 'nombre_participation_pee',
-    'nb_formations_suivies', 'distance_domicile_travail',
-    'niveau_education', 'annees_depuis_la_derniere_promotion'
+    'satisfaction_employee_environnement', 'note_evaluation_precedente', 'satisfaction_employee_nature_travail',
+          'satisfaction_employee_equipe', 'satisfaction_employee_equilibre_pro_perso', 'id_employee', 'note_evaluation_actuelle',
+          'heure_supplementaires', 'augementation_salaire_precedente', 'age', 'genre', 'revenu_mensuel', 'statut_marital', 'departement',
+          'poste', 'nombre_experiences_precedentes', 'annees_dans_l_entreprise',
+          'nombre_participation_pee', 'nb_formations_suivies', 'distance_domicile_travail', 'niveau_education', 'domaine_etude',
+          'frequence_deplacement', 'annees_depuis_la_derniere_promotion', 'categorie_revenu'
 ]
     
     input_data = pd.DataFrame([dict(zip(features, values))])
