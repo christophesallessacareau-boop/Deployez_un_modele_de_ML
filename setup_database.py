@@ -1,6 +1,7 @@
 """
 Script d'initialisation de la base de données
-Fichier: setup_database.py 
+Fichier: setup_database.py (à la racine du projet)
+
 Usage: python setup_database.py
 """
 
@@ -16,9 +17,9 @@ from database import DatabaseManager, db_config
 def setup_database():
     """Configuration initiale de la base de données"""
     
-    
+    print("=" * 60)
     print("CONFIGURATION DE LA BASE DE DONNÉES PostgreSQL")
-    
+    print("=" * 60)
     
     # Test de connexion
     print("\n1. Test de connexion...")
@@ -42,11 +43,11 @@ def setup_database():
     print("\n4. Tables créées avec succès:")
     tables = db_manager.list_all_tables()
     for table in tables:
-        print(f"   ✓ {table}")
+        print(f"    {table}")
     
-    
+    print("\n" + "=" * 60)
     print(" Configuration terminée avec succès!")
-    
+    print("=" * 60)
     
     return True
 
@@ -54,9 +55,9 @@ def setup_database():
 def import_csv_files():
     """Importe les fichiers CSV dans la base"""
     
-    
+    print("\n" + "=" * 60)
     print("IMPORT DES FICHIERS CSV")
-    
+    print("=" * 60)
     
     db_manager = DatabaseManager()
     
@@ -73,7 +74,7 @@ def import_csv_files():
             try:
                 print(f"\n Import de {csv_path}...")
                 rows = db_manager.import_csv_to_table(csv_path, table_name)
-                print(f"  ✓ {rows} lignes importées dans '{table_name}'")
+                print(f"   {rows} lignes importées dans '{table_name}'")
                 imported += 1
             except Exception as e:
                 print(f"  ✗ Erreur: {e}")
@@ -83,18 +84,18 @@ def import_csv_files():
     if imported > 0:
         print(f"\n {imported} fichier(s) importé(s) avec succès")
     else:
-        print("\n⚠ Aucun fichier CSV n'a été importé")
+        print("\n Aucun fichier CSV n'a été importé")
         print("   Placez vos fichiers CSV dans src/data/")
     
     return imported > 0
 
 
 def merge_tables_example():
-    """ fusion de tables"""
+    """Exemple de fusion de tables"""
     
-
+    print("\n" + "=" * 60)
     print("FUSION DES TABLES")
-    
+    print("=" * 60)
     
     db_manager = DatabaseManager()
     
@@ -117,15 +118,15 @@ def merge_tables_example():
             print(f"\n  {table}:")
             print(f"    {', '.join(cols)}")
     
-    
+    print("\n" + "-" * 60)
     print("Pour fusionner les tables, ajoutez ce code:")
-    
+    print("-" * 60)
     print("""
-# Exemple de fusion sur une clé commune 
+# Exemple de fusion sur une clé commune (à adapter)
 db_manager.merge_tables(
     tables=['sirh', 'sondage', 'evaluation'],
     output_table='donnees_fusionnees',
-    join_key='employee_id',  # à Remplacer par la clé commune
+    join_key='employee_id',  # Remplacez par votre clé commune
     how='inner'  # ou 'outer', 'left', 'right'
 )
     """)
@@ -136,9 +137,9 @@ db_manager.merge_tables(
 def show_logs():
     """Affiche les dernières opérations loggées"""
     
-    
+    print("\n" + "=" * 60)
     print("DERNIÈRES OPÉRATIONS ENREGISTRÉES")
-    
+    print("=" * 60)
     
     db_manager = DatabaseManager()
     
@@ -148,9 +149,9 @@ def show_logs():
             print("\n")
             print(logs.to_string(index=False))
         else:
-            print("\n⚠ Aucune opération enregistrée pour le moment")
+            print("\n Aucune opération enregistrée pour le moment")
     except Exception as e:
-        print(f"\n⚠ Impossible de récupérer les logs: {e}")
+        print(f"\n Impossible de récupérer les logs: {e}")
 
 
 def main():
@@ -175,13 +176,13 @@ def main():
     # Affichage des logs
     show_logs()
     
-    
+    print("\n" + "=" * 60)
     print(" PROCHAINES ÉTAPES")
-    
+    print("=" * 60)
     print("""
-1. Placer les fichiers CSV dans: src/data/
+1. Placez vos fichiers CSV dans: src/data/
 2. Pour importer: python setup_database.py
-3. Pour utiliser dans le code:
+3. Pour utiliser dans votre code:
    
    from database import DatabaseManager
    db = DatabaseManager()
