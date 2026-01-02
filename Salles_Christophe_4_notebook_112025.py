@@ -2213,7 +2213,8 @@ y_proba = best_logreg.predict_proba(X_final_test.iloc[[observation_index]])[0, 1
 import joblib
 
 # Sauvegarde du modèle optimisé (regression logistique avec SMOTE en Grid SearchCV dans un pipeline)
-joblib.dump(grid_logreg, 'model.joblib')
+model= grid_logreg.best_estimator_
+joblib.dump(model, 'model.joblib')
 
 print(" Modèle sauvegardé avec succès dans 'model.joblib'")
 
@@ -2223,7 +2224,5 @@ test_pred = loaded_model.predict(X_final_test[:1])
 print(f" Test de prédiction: {test_pred}")
 print(" Modèle rechargé avec succès pour vérification")
 
-# Vérification du meilleur score
-print(f"Meilleur score: {loaded_model.best_score_}")
-print(f"Meilleurs paramètres: {loaded_model.best_params_}")
+
 
