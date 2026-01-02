@@ -1,66 +1,41 @@
 # workflow affiché dans GitHub Actions sous le nom "Python tests"
 
 name: Python tests
-# Controls when the workflow will run
+
 on:
-# Triggers the workflow on push or pull request events for the "main" and "develop" branches
   push:
-    branches:
-      - develop
-      - main
+    branches: [ main, develop ]
   pull_request:
-    branches:
-      - develop
-      - main
-      
-# A workflow run is made up
+    branches: [ main, develop ]
+
 jobs:
-  # This workflow contains a job called "test"
   test:
-    # The type of runner that the job will run on (ubuntu is faster)
     runs-on: ubuntu-latest
 
-    #tests on several versions of Python
     strategy:
       matrix:
-        python-version: ["3.12", "3.13", "3.14"]
-        
-    # Steps represent a sequence of tasks that will be executed as part of the job
+        python-version: ["3.10", "3.11", "3.12"]
+
     steps:
-      # Checks-out our repository 
       - name: Checkout repository
-        #last version v4 is now more efficient
         uses: actions/checkout@v4
 
-      # tests on several versions of Python
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "pip"
-
-      # Mise en cache des dépendances pip (pour accélèrer les builds)
-      - name: Cache pip dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
 
       - name: Install dependencies
-        # exécution de plusieurs commandes shell
-          ## Mise à jour Python
-          ## Installation des dépendances du fichier requirements
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest pytest-cov
 
-        # lancement du test pytest dans le dossier tests/ (fichiers avec test_)
-          # ajout du répertoire courant au PYTHONPATH (pour trouver le dossier src/)
-          # affichage des résultats avec détails (nom de chaque test et statut)
-      - name: Run tests with pytest
-        run: PYTHONPATH=. pytest -v
+      - name: Run tests
+        run: pytest --cov=. --cov-report=term-missing
+
+      
+
 
 
 
