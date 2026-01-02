@@ -1,4 +1,5 @@
-#framework de Gradio, interface webvpour tester le modèle
+# module optionnel
+# framework de Gradio, interface web pour tester le modèle
 
 import gradio as gr
 import joblib
