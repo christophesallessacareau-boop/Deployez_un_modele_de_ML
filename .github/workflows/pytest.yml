@@ -58,6 +58,7 @@ jobs:
       - name: Run tests
         env:
           TEST_DB_URL: postgresql://postgres:postgres@localhost:5432/test_db
+          DB_URL: postgresql://postgres:postgres@localhost:5432/test_db
         run: pytest --cov=. --cov-report=term-missing
 
 
