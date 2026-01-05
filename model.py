@@ -4,13 +4,15 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from config import DB_URL
 
+# utilisation directe des credentials avec DB_URL
+# configuration de la connexion à la base avec SQLAlchemy
 engine = create_engine(DB_URL)
 
 class SimpleModel:
-
+    # chargement du modele entraîne
     def __init__(self, model_path="model.joblib"):
         self.model = joblib.load(model_path)
-
+    # prediction avec ce modele
     def predict_one(self, employee_id):
         query = f"""
             SELECT * FROM donnees_fusionnees
@@ -19,7 +21,7 @@ class SimpleModel:
         df = pd.read_sql(query, engine)
 
         if df.empty:
-            raise ValueError("Employé introuvable")
+            raise ValueError("Employe introuvable")
 
         X = df.drop(columns=["a_quitte_l_entreprise"])
         prediction = self.model.predict(X)[0]
@@ -27,7 +29,7 @@ class SimpleModel:
         self.log_prediction(employee_id, X.to_dict(), {"prediction": prediction})
 
         return prediction
-
+    # enregistrement des predictions
     def log_prediction(self, employee_id, input_data, output_data):
         with engine.connect() as conn:
             conn.execute(

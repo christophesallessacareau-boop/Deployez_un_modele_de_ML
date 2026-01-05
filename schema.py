@@ -1,9 +1,11 @@
-# Schéma SQL complet
+# -*- coding: utf-8 -*-
+
 SCHEMA_SQL = """
 -- =====================================================
--- CRÉATION DES TABLES MÉTIER
+-- CREATION DES TABLES METIER
 -- =====================================================
-CREATE TABLE extrait_sirh (
+-- avec horodatage des lignes pour tracabilite
+CREATE TABLE IF NOT EXISTS extrait_sirh (
     id_employee INTEGER PRIMARY KEY,
     age INTEGER,
     genre VARCHAR(20),
@@ -17,7 +19,7 @@ CREATE TABLE extrait_sirh (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE extrait_eval (
+CREATE TABLE IF NOT EXISTS extrait_eval (
     eval_number VARCHAR(50) PRIMARY KEY,
     id_employee INTEGER NOT NULL,
     augmentation_salaire_precedente VARCHAR(20),
@@ -32,7 +34,7 @@ CREATE TABLE extrait_eval (
     FOREIGN KEY (id_employee) REFERENCES extrait_sirh(id_employee) ON DELETE CASCADE
 );
 
-CREATE TABLE extrait_sondage (
+CREATE TABLE IF NOT EXISTS extrait_sondage (
     code_sondage VARCHAR(50) PRIMARY KEY,
     id_employee INTEGER NOT NULL,
     a_quitte_l_entreprise VARCHAR(10),
@@ -48,7 +50,7 @@ CREATE TABLE extrait_sondage (
 );
 
 -- =====================================================
--- VUE FUSIONNÉE (INNER JOIN)
+-- VUE FUSIONNEE (INNER JOIN)
 -- =====================================================
 
 CREATE OR REPLACE VIEW donnees_fusionnees AS
@@ -86,6 +88,14 @@ SELECT
 FROM extrait_sirh s
 INNER JOIN extrait_eval e ON s.id_employee = e.id_employee
 INNER JOIN extrait_sondage so ON s.id_employee = so.id_employee;
---traçabilité du modèle
-CREATE TABLE model_logs ( id SERIAL PRIMARY KEY, id_employee INTEGER, input_json JSONB, output_json JSONB, created_at TIMESTAMP DEFAULT NOW() );
+
+-- tracabilite du modele et enregistrement des predictions
+-- pour chaque employe, on stocke les donnees d_entree, la prediction et un horodatage
+CREATE TABLE IF NOT EXISTS model_logs ( 
+    id SERIAL PRIMARY KEY,
+    id_employee INTEGER, 
+    input_json JSONB, 
+    output_json JSONB, 
+    created_at TIMESTAMP DEFAULT NOW() 
+);
 """

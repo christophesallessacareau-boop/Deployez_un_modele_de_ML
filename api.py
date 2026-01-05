@@ -1,4 +1,4 @@
-# Fichier : api.py
+# Fichier : api.py pour FastAPI
 
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
@@ -8,20 +8,21 @@ from sqlalchemy import create_engine, text
 import json
 from config import DB_URL
 
+# utilisation directe des credentials avec DB_URL
 # Connexion PostgreSQL
 engine = create_engine(DB_URL)
 
-# Charger le modèle ML
+# Charger le modele ML
 model = joblib.load("model.joblib")
 
 app = FastAPI(
-    title="API RH - Modèle ML",
-    description="API locale exposant un modèle ML avec validation Pydantic et traçabilité PostgreSQL",
+    title="API RH - Modele ML",
+    description="API locale exposant un modele ML avec validation Pydantic et traçabilite PostgreSQL",
     version="1.0.0"
 )
 
 # -----------------------------
-# 1. Modèle Pydantic (validation)
+# 1. Modele Pydantic (validation)
 # -----------------------------
 
 class EmployeeFeatures(BaseModel):
@@ -61,13 +62,13 @@ class EmployeeFeatures(BaseModel):
 def root():
     return {
         "status": "ok",
-        "message": "API RH opérationnelle en localhost",
+        "message": "API RH operationnelle en localhost",
         "docs": "http://127.0.0.1:8000/docs"
     }
 
 
 # -----------------------------
-# 3. Endpoint de prédiction
+# 3. Endpoint de prediction
 # -----------------------------
 
 @app.post("/predict")
@@ -76,10 +77,10 @@ def predict(features: EmployeeFeatures):
     # Convertir en DataFrame
     df = pd.DataFrame([features.dict()])
 
-    # Prédiction
+    # Prediction
     prediction = model.predict(df)[0]
 
-    # Traçabilité : enregistrer input/output
+    # Traçabilite : enregistre input/output
     with engine.connect() as conn:
         conn.execute(
             text("""
@@ -87,7 +88,7 @@ def predict(features: EmployeeFeatures):
                 VALUES (:id_employee, :input_json, :output_json)
             """),
             {
-                "id_employee": None,  # pas d'ID employé ici
+                "id_employee": None,  # pas d'ID employe ici
                 "input_json": json.dumps(features.dict()),
                 "output_json": json.dumps({"prediction": prediction})
             }
@@ -96,14 +97,14 @@ def predict(features: EmployeeFeatures):
 
     return {
         "prediction": prediction,
-        "details": "Prédiction effectuée avec succès"
+        "details": "Prediction effectuee avec succes"
     }
 
 
 # -----------------------------
-# 4. Endpoint prédiction via ID employé (depuis PostgreSQL)
+# 4. Endpoint prediction via ID employe (depuis PostgreSQL)
 # -----------------------------
-
+#l'utilisateur demande une prediction via un ID
 @app.get("/predict/{employee_id}")
 def predict_from_db(employee_id: int):
 
@@ -115,12 +116,12 @@ def predict_from_db(employee_id: int):
     df = pd.read_sql(query, engine)
 
     if df.empty:
-        return {"error": "Employé introuvable dans la base"}
+        return {"error": "Employe introuvable dans la base"}
 
     X = df.drop(columns=["a_quitte_l_entreprise"])
     prediction = model.predict(X)[0]
 
-    # Traçabilité
+    # Traçabilite
     with engine.connect() as conn:
         conn.execute(
             text("""
