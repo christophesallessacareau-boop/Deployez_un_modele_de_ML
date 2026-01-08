@@ -10,14 +10,23 @@ model = joblib.load('model.joblib')
 
 # Liste des features
 # pour chaque variable, Gradio cree un champ d'entree
-features = [
-    'satisfaction_employee_environnement', 'note_evaluation_precedente', 'satisfaction_employee_nature_travail',
-    'satisfaction_employee_equipe', 'satisfaction_employee_equilibre_pro_perso', 'id_employee', 'note_evaluation_actuelle',
-    'heure_supplementaires', 'augmentation_salaire_precedente', 'age', 'genre', 'revenu_mensuel', 'statut_marital', 'departement',
-    'poste', 'nombre_experiences_precedentes', 'annees_dans_l_entreprise', 'nombre_participation_pee',
-    'nb_formations_suivies', 'distance_domicile_travail', 'niveau_education', 'domaine_etude',
-    'frequence_deplacement', 'annees_depuis_la_derniere_promotion', 'categorie_revenu'
-]
+features = ['augementation_salaire_precedente', 'frequence_deplacement',
+       'heure_supplementaires', 'genre', 'statut_marital_Divorcé(e)',
+       'statut_marital_Marié(e)', 'departement_Consulting',
+       'departement_Ressources Humaines', 'poste_Cadre Commercial',
+       'poste_Consultant', 'poste_Directeur Technique', 'poste_Manager',
+       'poste_Représentant Commercial', 'poste_Ressources Humaines',
+       'poste_Senior Manager', 'poste_Tech Lead',
+       'domaine_etude_Entrepreunariat', 'domaine_etude_Infra & Cloud',
+       'domaine_etude_Marketing', 'domaine_etude_Ressources Humaines',
+       'domaine_etude_Transformation Digitale',
+       'satisfaction_employee_environnement', 'note_evaluation_precedente',
+       'satisfaction_employee_nature_travail', 'satisfaction_employee_equipe',
+       'satisfaction_employee_equilibre_pro_perso', 'note_evaluation_actuelle',
+       'age', 'revenu_mensuel', 'nombre_experiences_precedentes',
+       'annees_dans_l_entreprise', 'nombre_participation_pee',
+       'nb_formations_suivies', 'distance_domicile_travail',
+       'niveau_education', 'annees_depuis_la_derniere_promotion']
 
 # Fonction de prediction
 # on recupere les valeurs saisies dans Gradio sous forme d'un tuple
@@ -26,6 +35,9 @@ features = [
 def predict(*values):
     input_data = pd.DataFrame([dict(zip(features, values))])
     prediction = model.predict(input_data)[0]
+    
+    # Définir le libellé selon la prédiction
+    label_prediction = "probabilité de rester" if prediction == 0 else "probabilité de démissionner"
 
     if hasattr(model, 'predict_proba'):
         proba = model.predict_proba(input_data)[0]
@@ -34,7 +46,10 @@ def predict(*values):
             'Probabilites': {f'Classe {i}': float(p) for i, p in enumerate(proba)}
         } # retourne la prediction et les probabilites
 
-    return f"Prediction: {prediction}"
+    return {
+        'Prediction': str(prediction),
+        'Interpretation': label_prediction
+    }
 
 # Interface Gradio
 with gr.Blocks(title="Modele de regression logistique - Prediction") as demo:
