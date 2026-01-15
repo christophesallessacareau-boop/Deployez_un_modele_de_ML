@@ -1,3 +1,4 @@
+# fichier de fusion des csv pre-processing et creation du fichier donnees_fusionnees.csv
 # %%
 import pandas as pd
 from sklearn.compose import ColumnTransformer
@@ -155,7 +156,7 @@ df_final['a_quitte_l_entreprise'] = y_encoded.values
 # %%
 df_final.to_csv('donnees_fusionnees.csv', index=False, encoding='utf-8')
 # %%
-print(" Fichier CSV créé avec les donoms des variables ORIGINALES")
+print(" Fichier CSV créé avec les noms des variables ORIGINALES")
 print(f"Dimensions: {df_final.shape}")
 print(f"\nColonnes: {df_final.columns.tolist()}")
 print(df_final.info())

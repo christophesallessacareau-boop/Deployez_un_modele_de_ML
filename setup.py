@@ -1,9 +1,7 @@
 # script d'initialisation
 ## creation des tables, import CSV, fusion des donnees, chargement du modele entraîne
 ## prediction du modele avec un individu (id_employee=101)
-from database import create_tables
-from import_csv import import_csv_to_table
-from fusion import load_fused_data
+from database import create_tables, load_fused_data, import_csv_to_table
 from model import SimpleModel
 from schema import SCHEMA_SQL
 
@@ -11,9 +9,7 @@ from schema import SCHEMA_SQL
 create_tables(SCHEMA_SQL)
 
 # 2. Import CSV
-import_csv_to_table("extrait_sirh.csv", "extrait_sirh")
-import_csv_to_table("extrait_eval.csv", "extrait_eval")
-import_csv_to_table("extrait_sondage.csv", "extrait_sondage")
+import_csv_to_table("donnees_fusionnees.csv", "donnees_fusionnees")
 
 # 3. Charger les donnees fusionnees
 df = load_fused_data()
@@ -22,5 +18,5 @@ df = load_fused_data()
 model = SimpleModel("model.joblib")
 
 # 5. Prediction
-result = model.predict_one(101)
+result = model.predict_one(1)
 print("Prediction :", result)

@@ -1,12 +1,14 @@
 # Fichier : api.py pour FastAPI
 
+import uvicorn
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
+from typing import Literal
 import joblib
 import pandas as pd
 from sqlalchemy import create_engine, text
 import json
-from config import DB_URL
+from database import DB_URL
 
 # utilisation directe des credentials avec DB_URL
 # Connexion PostgreSQL
@@ -25,33 +27,57 @@ app = FastAPI(
 # 1. Modele Pydantic (validation)
 # -----------------------------
 
-class EmployeeFeatures(BaseModel):
-    augmentation_salaire_precedente: str
-    frequence_deplacement: str
-    heure_supplementaires: str
-    genre: str
-    statut_marital: str
-    departement: str
-    poste: str
-    domaine_etude: str
 
+class EmployeeFeatures(BaseModel):
+    id_employee: int = Field(..., description="Identifiant unique de l'employé")
     satisfaction_employee_environnement: int
     note_evaluation_precedente: int
     satisfaction_employee_nature_travail: int
     satisfaction_employee_equipe: int
     satisfaction_employee_equilibre_pro_perso: int
-    note_evaluation_actuelle: int
 
+    note_evaluation_actuelle: int
+    heure_supplementaires: Literal["Oui", "Non"]
+    augementation_salaire_precedente: Literal[
+        "11%", "12%", "13%", "14%", "15%", "16%", "17%", "18%", "19%",
+        "20%", "21%", "22%", "23%", "24%", "25%"
+    ]
     age: int
+    genre: Literal["F", "M"]
     revenu_mensuel: int
+    statut_marital: Literal["Célibataire", "Marié(e)", "Divorcé(e)"]
+    departement: Literal["Commercial", "Consulting", "Ressources Humaines"]
+    poste: Literal[
+        "Cadre Commercial",
+        "Assistant de Direction",
+        "Consultant",
+        "Tech Lead",
+        "Manager",
+        "Senior Manager",
+        "Représentant Commercial",
+        "Directeur Technique",
+        "Ressources Humaines",
+    ]
     nombre_experiences_precedentes: int
     annees_dans_l_entreprise: int
-    annees_dans_le_poste_actuel: int
+    a_quitte_l_entreprise: int
     nombre_participation_pee: int
     nb_formations_suivies: int
     distance_domicile_travail: int
     niveau_education: int
+    domaine_etude: Literal[
+        "Infra & Cloud",
+        "Autre",
+        "Transformation Digitale",
+        "Marketing",
+        "Entrepreunariat",
+        "Ressources Humaines",
+    ]
+    frequence_deplacement: Literal["Occasionnel", "Frequent", "Aucun"]
     annees_depuis_la_derniere_promotion: int
+
+    class Config:
+        orm_mode = True
 
 
 # -----------------------------
@@ -78,7 +104,7 @@ def predict(features: EmployeeFeatures):
     df = pd.DataFrame([features.dict()])
 
     # Prediction
-    prediction = model.predict(df)[0]
+    prediction = int(model.predict(df)[0])
 
     # Traçabilite : enregistre input/output
     with engine.connect() as conn:
@@ -112,14 +138,16 @@ def predict_from_db(employee_id: int):
         SELECT * FROM donnees_fusionnees
         WHERE id_employee = {employee_id}
     """
-
-    df = pd.read_sql(query, engine)
+    
+    df = pd.read_sql(query, engine, params={"employee_id": employee_id})
 
     if df.empty:
         return {"error": "Employe introuvable dans la base"}
 
-    X = df.drop(columns=["a_quitte_l_entreprise"])
-    prediction = model.predict(X)[0]
+    # Supprimer la cible + created_at (pour enlever les mgs d'erreur)
+    X = df.drop(columns=["a_quitte_l_entreprise", "created_at"])
+    prediction = int(model.predict(df)[0])
+
 
     # Traçabilite
     with engine.connect() as conn:
@@ -130,14 +158,14 @@ def predict_from_db(employee_id: int):
             """),
             {
                 "id_employee": employee_id,
-                "input_json": json.dumps(X.to_dict()),
-                "output_json": json.dumps({"prediction": prediction})
+                "input_json": json.dumps(X.to_dict(orient="records")[0]),
+                "output_json": json.dumps({"prediction": int(prediction)})
             }
         )
         conn.commit()
 
     return {
         "employee_id": employee_id,
-        "prediction": prediction
+        "prediction": int(prediction)
     }
 # Fin du fichier api.py
