@@ -134,10 +134,10 @@ def predict(features: EmployeeFeatures):
 @app.get("/predict/{employee_id}")
 def predict_from_db(employee_id: int):
 
-    query = f"""
+    query = text("""
         SELECT * FROM donnees_fusionnees
-        WHERE id_employee = {employee_id}
-    """
+        WHERE id_employee = :employee_id
+    """)
     
     df = pd.read_sql(query, engine, params={"employee_id": employee_id})
 

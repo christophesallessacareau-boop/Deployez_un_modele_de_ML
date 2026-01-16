@@ -22,32 +22,35 @@ DB_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 engine = create_engine(DB_URL)
 
 # ids déjà présents
-existing_ids = pd.read_sql(
-    "SELECT id_employee FROM donnees_fusionnees",
-    engine
-)
 
-# Chargement du CSV
-# -----------------------------
-df = pd.read_csv("donnees_fusionnees.csv")
+def import_csv_to_db(csv_path="donnees_fusionnees.csv"):
+    # ids déjà présents
+    try:
+        existing_ids = pd.read_sql(
+            "SELECT id_employee FROM donnees_fusionnees",
+            engine
+        )
+    except Exception:
+        existing_ids = pd.DataFrame(columns=["id_employee"])
 
-df = df[~df["id_employee"].isin(existing_ids["id_employee"])]
+    # Chargement du CSV
+    df = pd.read_csv(csv_path)
 
-# Insertion dans PostgreSQL
-# -----------------------------
-df.to_sql(
-    name="donnees_fusionnees",
-    con=engine,
-    if_exists="append",   # ajoute les lignes à la table existante
-    index=False           # ne pas créer de colonne index
-)
+    # Suppression des doublons
+    df = df[~df["id_employee"].isin(existing_ids["id_employee"])]
 
-print(" Import du fichier CSV terminé")
+    # Insertion dans PostgreSQL
+    df.to_sql(
+        name="donnees_fusionnees",
+        con=engine,
+        if_exists="append",
+        index=False
+    )
+
+    print("Import du fichier CSV terminé")
 
 
 # lecture des donnees fusionnees depuis la base de donnees
-# utilisation directe des credentials avec DB_URL
-engine = create_engine(DB_URL)
 
 def load_fused_data():
     query = "SELECT * FROM donnees_fusionnees"
@@ -60,5 +63,4 @@ def load_fused_data():
     return df
 
 if __name__ == "__main__":
-    df_loaded = load_fused_data()
-    print(df_loaded.head())
+    import_csv_to_db()

@@ -2,11 +2,11 @@ import json
 import joblib
 import pandas as pd
 from sqlalchemy import create_engine, text
-from config import DB_URL
+from database import engine
 
 # utilisation directe des credentials avec DB_URL
 # configuration de la connexion à la base avec SQLAlchemy
-engine = create_engine(DB_URL)
+
 
 class SimpleModel:
     # chargement du modele entraîne
@@ -14,12 +14,11 @@ class SimpleModel:
         self.model = joblib.load(model_path)
     # prediction avec ce modele
     def predict_one(self, employee_id):
-        query = f"""
+        query = text("""
             SELECT * FROM donnees_fusionnees
-            WHERE id_employee = {employee_id}
-        """
-        df = pd.read_sql(query, engine)
-
+            WHERE id_employee = :id
+        """)
+        df = pd.read_sql(query, engine, params={"id": employee_id})
         if df.empty:
             raise ValueError("Employe introuvable")
 

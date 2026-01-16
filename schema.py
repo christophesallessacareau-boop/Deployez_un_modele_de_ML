@@ -3,9 +3,8 @@
 # création du schema sql et des tables
 
 
-import psycopg2
-from psycopg2 import sql
-import os
+from sqlalchemy import text
+from database import engine
 
 SCHEMA_SQL = """
 -- =====================================================
@@ -61,87 +60,15 @@ CREATE TABLE IF NOT EXISTS model_logs (
 """
     
 
-def create_schema(host="localhost", database="ma_base_rh", user="postgres", password=None):
+def create_schema():
     """
-    Crée le schéma de la base de données.
-    
-    Args:
-        host: Hôte PostgreSQL
-        database: Nom de la base de données
-        user: Utilisateur PostgreSQL
-        password: Mot de passe (si None, sera demandé)
+    Crée les tables de la base de données via SQLAlchemy.
     """
-    try:
-        # Si pas de mot de passe fourni, le demander
-        if password is None:
-            import getpass
-            password = getpass.getpass("Mot de passe PostgreSQL: ")
-        
-        # Connexion à la base de données
-        print(f"Connexion à la base de données '{database}'...")
-        conn = psycopg2.connect(
-            host=host,
-            database=database,
-            user=user,
-            password=password
-        )
-        
-        # Désactiver l'autocommit pour gérer les transactions
-        conn.autocommit = False
-        
-        cur = conn.cursor()
-        
-        # Exécution du schéma
-        print("Création des tables et vues...")
-        cur.execute(SCHEMA_SQL)
-        
-        # Validation des changements
-        conn.commit()
-        
-        print(" Schéma créé avec succès!")
-        
-        # Vérification des tables créées
-        cur.execute("""
-            SELECT table_name 
-            FROM information_schema.tables 
-            WHERE table_schema = 'public' 
-            AND table_type = 'BASE TABLE'
-            ORDER BY table_name;
-        """)
-        
-        tables = cur.fetchall()
-        print(f"\nTables créées ({len(tables)}):")
-        for table in tables:
-            print(f"  - {table[0]}")
-        
-        # Vérification des vues
-        cur.execute("""
-            SELECT table_name 
-            FROM information_schema.views 
-            WHERE table_schema = 'public'
-            ORDER BY table_name;
-        """)
-        
-        views = cur.fetchall()
-        print(f"\nVues créées ({len(views)}):")
-        for view in views:
-            print(f"  - {view[0]}")
-        
-        cur.close()
-        conn.close()
-        
-    except psycopg2.Error as e:
-        print(f" Erreur PostgreSQL: {e}")
-        if 'conn' in locals():
-            conn.rollback()
-            conn.close()
-    except Exception as e:
-        print(f" Erreur: {e}")
+    with engine.begin() as conn:
+        conn.execute(text(SCHEMA_SQL))
+
+    print("Schéma créé avec succès")
+
 
 if __name__ == "__main__":
-    create_schema(
-        host="localhost",
-        database="ma_base_rh",
-        user="postgres",
-        password=None  # Sera demandé lors de l'exécution
-    )
+    create_schema()
