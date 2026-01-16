@@ -16,7 +16,7 @@ def test_predict_missing_fields(client):
     assert response.status_code == 422  
 
 
-# test sur un employe inexistant (id 1999) renvoyant un message d'erreur
+# test sur un employe inexistant (id 3000) renvoyant un message d'erreur
 # simulation de la fonction pd.read_sql par monkeypatch
 # renvoie un DataFrame vide pour cet ID inexistant
 def test_predict_from_db_not_found(client, monkeypatch):
@@ -30,6 +30,6 @@ def test_predict_from_db_not_found(client, monkeypatch):
     monkeypatch.setattr("api.pd.read_sql", mock_sql)
 
 # reponse avec cle error et message ecrit "introuvable"
-    response = client.get("/predict/1999")
+    response = client.get("/predict/3000")
     assert response.status_code == 200 # l'API repond bien
     assert "introuvable" in response.json()["error"]
