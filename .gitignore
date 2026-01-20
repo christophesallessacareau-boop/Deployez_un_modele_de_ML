@@ -3,4 +3,7 @@
 *.lock
 __pycache__/
 *.pyc
-.env
+.env/
+venv/
+venv312/
+.ipynb_checkpoints/

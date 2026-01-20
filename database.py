@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 import pandas as pd
 
+# Chargement des variables d'environnement depuis le fichier .env
 load_dotenv()
 
 DB_USER = os.getenv("DB_USER")
@@ -18,13 +19,13 @@ DB_NAME = os.getenv("DB_NAME")
 DB_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 
-# utilisation directe des credentials avec DB_URL
+# utilisation directe des credentials avec DB_URL; connexion à la base de donnees
 engine = create_engine(DB_URL)
 
 # ids déjà présents
 
 def import_csv_to_db(csv_path="donnees_fusionnees.csv"):
-    # ids déjà présents
+    # lecture des id déjà présents dans la table
     try:
         existing_ids = pd.read_sql(
             "SELECT id_employee FROM donnees_fusionnees",

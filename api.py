@@ -29,7 +29,6 @@ app = FastAPI(
 
 
 class EmployeeFeatures(BaseModel):
-    id_employee: int = Field(..., description="Identifiant unique de l'employé")
     satisfaction_employee_environnement: int
     note_evaluation_precedente: int
     satisfaction_employee_nature_travail: int
@@ -60,7 +59,6 @@ class EmployeeFeatures(BaseModel):
     ]
     nombre_experiences_precedentes: int
     annees_dans_l_entreprise: int
-    a_quitte_l_entreprise: int
     nombre_participation_pee: int
     nb_formations_suivies: int
     distance_domicile_travail: int
@@ -102,6 +100,7 @@ def predict(features: EmployeeFeatures):
 
     # Convertir en DataFrame
     df = pd.DataFrame([features.dict()])
+    
 
     # Prediction
     prediction = int(model.predict(df)[0])
@@ -123,7 +122,7 @@ def predict(features: EmployeeFeatures):
 
     return {
         "prediction": prediction,
-        "details": "Prediction effectuee avec succes"
+        "details": "0 = l'employé reste, 1 = l'employé quitte"
     }
 
 

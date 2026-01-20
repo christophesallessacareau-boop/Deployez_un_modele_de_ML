@@ -4,7 +4,7 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from database import engine
 
-# utilisation directe des credentials avec DB_URL
+
 # configuration de la connexion à la base avec SQLAlchemy
 
 
@@ -23,12 +23,12 @@ class SimpleModel:
             raise ValueError("Employe introuvable")
 
         X = df.drop(columns=["a_quitte_l_entreprise"])
-        prediction = self.model.predict(X)[0]
+        prediction = self.model.predict(X)[0] # une seule prediction unique
 
         self.log_prediction(employee_id, X.to_dict(), {"prediction": prediction})
 
         return prediction
-    # enregistrement des predictions
+    # enregistrement des predictions dans la base dédiée aux logs
     def log_prediction(self, employee_id, input_data, output_data):
         with engine.connect() as conn:
             conn.execute(
