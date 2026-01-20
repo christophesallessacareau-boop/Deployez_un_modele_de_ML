@@ -5,7 +5,7 @@ import pytest
 
 
 
-# test que le modele entraine existe et peut être charge
+# test que le modele entraine existe, peut être charge et fonctionne
 def test_model_load():
     model = SimpleModel("model.joblib")
     assert model.model is not None
@@ -25,6 +25,6 @@ def test_predict_one_missing_employee(monkeypatch):
 # appliquer le mock à la place du vrai modele
     monkeypatch.setattr("model.pd.read_sql", mock_sql)
 
-# exception attendue pour un employe inexistant (1999)
+# exception attendue pour un employe inexistant (3000)
     with pytest.raises(ValueError):
-        model.predict_one(1999)
+        model.predict_one(3000)

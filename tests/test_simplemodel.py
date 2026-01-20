@@ -12,14 +12,14 @@ from model import SimpleModel
 def test_predict_one_ok(mock_read_sql, mock_load):
     # faux modèle ML
     fake_model = MagicMock()
-    fake_model.predict.return_value = [1]
+    fake_model.predict.return_value = [1] # prediction attendue tjs egale a 1
     mock_load.return_value = fake_model
 
     # fausses données SQL
     mock_read_sql.return_value = pd.DataFrame({
         "id_employee": [3000],
         "age": [30],
-        "salary": [50000],
+        "revenu_mensuel": [50000],
         "a_quitte_l_entreprise": [0]
     })
 
