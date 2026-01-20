@@ -1,7 +1,4 @@
 # workflow affiché dans GitHub Actions sous le nom "Python tests"
-# tests réalisés sur la base de test
-# pas d'accès à la base réelle du projet avec les identifiants de connexion à cette base de test
-
 name: Python tests
 
 on:
@@ -13,21 +10,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:18
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     strategy:
       matrix:
@@ -48,20 +30,7 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-cov
 
-      - name: Wait for PostgreSQL
-        run: |
-          until pg_isready -h localhost -p 5432 -U postgres; do
-            echo "Waiting for PostgreSQL..."
-            sleep 2
-          done
-
       - name: Run tests
-        env:
-          DB_USER: postgres 
-          DB_PASSWORD: postgres 
-          DB_HOST: localhost 
-          DB_PORT: 5432 
-          DB_NAME: test_db
         run: pytest --cov=. --cov-report=term-missing
 
 
