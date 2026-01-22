@@ -1,4 +1,4 @@
-# tests/test_database.py
+# tests
 import os
 from dotenv import load_dotenv
 import pytest
@@ -48,6 +48,29 @@ def test_engine():
         conn.execute(text("DROP SCHEMA public CASCADE; CREATE SCHEMA public;"))
         conn.commit()
 
+#  LES TESTS 
+def test_connexion_database(test_engine):
+    """
+    Vérifie que la connexion à la base de données fonctionne
+    """
+    with test_engine.connect() as conn:
+        result = conn.execute(text("SELECT 1"))
+        assert result.scalar() == 1
+
+
+def test_creation_schema(test_engine):
+    """
+    Vérifie que le schéma SQL peut être créé sans erreur
+    """
+    with test_engine.connect() as conn:
+        conn.execute(text(SCHEMA_SQL))
+        conn.commit()
+        
+        result = conn.execute(text(
+            "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
+        ))
+        tables = [row[0] for row in result]
+        assert len(tables) > 0
 
 
     
