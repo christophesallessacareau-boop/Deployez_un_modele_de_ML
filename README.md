@@ -42,10 +42,10 @@ traçage des erreurs
 
 # Fonctionnalités:
 Prédiction en temps réel  
-Interface interactive avec Fast API et Gradio.  
+Interface interactive avec Fast API  
 Modèle entraîné avec pipeline complet (preprocessing + modèle)
 
-# Utilisation:
+# Utilisation de l'API FastSAPI:
 Lancer l'API FastAPI: uvicorn api:app --reload   
 Ou bien via http://127.0.0.1:8000  
 Remplissez les champs avec les valeurs des features  
@@ -107,8 +107,10 @@ exemples de choix pour la prédiction:
   "annees_depuis_la_derniere_promotion": 0
 }  
 
-3) probabilité de partir/rester dans l'entreprise selon 2 exemples d' Id existants:
-ID=1, proba=1, il est considéré comme partant
+3) probabilité de partir/rester dans l'entreprise selon 2 exemples d' Id existants:  
+
+ID=1, proba=1, il est considéré comme partant  
+
 ID=2, proba=0, il est considéré comme restant  
   
 # Traçabilité:
@@ -118,9 +120,14 @@ la base est PostgreSQL
 
 # Gradio: une alternative à FastAPI
 app.py contient une interface Gradio pour tester le modèle manuellement et obtenir une prédiction instantanée.  
-Option indépendante de l’API FastAPI  Lancement de Gradio en application locale:  
+Option indépendante de l’API FastAPI  
+Lancement de Gradio en application locale:  
 python app.py  
 ou bien http://127.0.0.1:7860
+indiquer les valeurs voulues pour chaque variable numérique  
+et lorsque c'est le cas, choisissez une valeur dans le Menu déroulant pour les variables contraintes.  
+Cliquez sur Prédire  
+Consultez les résultats et probabilités de démission.
 
 
 # Technologies:
