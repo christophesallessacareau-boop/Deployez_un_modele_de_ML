@@ -33,3 +33,44 @@ def test_predict_from_db_not_found(client, monkeypatch):
     response = client.get("/predict/3000")
     assert response.status_code == 200 # l'API repond bien
     assert "introuvable" in response.json()["error"]
+
+# Test sur endpoint predict avec données valides
+def test_predict_success(client, monkeypatch):
+
+    # mock du modele ML
+    class MockModel:
+        def predict(self, df):
+            return [0]
+
+    monkeypatch.setattr("api.model", MockModel())
+
+    payload = {
+        "satisfaction_employee_environnement": 3,
+        "note_evaluation_precedente": 3,
+        "satisfaction_employee_nature_travail": 3,
+        "satisfaction_employee_equipe": 3,
+        "satisfaction_employee_equilibre_pro_perso": 3,
+        "note_evaluation_actuelle": 3,
+        "heure_supplementaires": "Non",
+        "augementation_salaire_precedente": "15%",
+        "age": 35,
+        "genre": "M",
+        "revenu_mensuel": 4000,
+        "statut_marital": "Marié(e)",
+        "departement": "Commercial",
+        "poste": "Manager",
+        "nombre_experiences_precedentes": 2,
+        "annees_dans_l_entreprise": 5,
+        "nombre_participation_pee": 1,
+        "nb_formations_suivies": 2,
+        "distance_domicile_travail": 10,
+        "niveau_education": 3,
+        "domaine_etude": "Marketing",
+        "frequence_deplacement": "Aucun",
+        "annees_depuis_la_derniere_promotion": 2
+    }
+
+    response = client.post("/predict", json=payload)
+
+    assert response.status_code == 200
+    assert response.json()["prediction"] == 0
