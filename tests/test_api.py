@@ -37,13 +37,31 @@ def test_predict_from_db_not_found(client, monkeypatch):
 # Test sur endpoint predict avec données valides
 def test_predict_success(client, monkeypatch):
 
-    # mock du modele ML
+    # ---------- mock du modele ML ----------
     class MockModel:
         def predict(self, df):
             return [0]
 
     monkeypatch.setattr("api.model", MockModel())
 
+    # ---------- mock de la connexion DB ----------
+    class DummyConnection:
+        def execute(self, *args, **kwargs):
+            pass
+        def commit(self):
+            pass
+        def __enter__(self):
+            return self
+        def __exit__(self, exc_type, exc, tb):
+            pass
+
+    class DummyEngine:
+        def connect(self):
+            return DummyConnection()
+
+    monkeypatch.setattr("api.engine", DummyEngine())
+
+    # ---------- payload valide ----------
     payload = {
         "satisfaction_employee_environnement": 3,
         "note_evaluation_precedente": 3,
@@ -66,7 +84,7 @@ def test_predict_success(client, monkeypatch):
         "distance_domicile_travail": 10,
         "niveau_education": 3,
         "domaine_etude": "Marketing",
-        "frequence_deplacement": "Aucun",
+        "frequence_deplacement": "Occasionnel",
         "annees_depuis_la_derniere_promotion": 2
     }
 
@@ -74,3 +92,4 @@ def test_predict_success(client, monkeypatch):
 
     assert response.status_code == 200
     assert response.json()["prediction"] == 0
+
