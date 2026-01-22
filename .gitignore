@@ -7,3 +7,6 @@ __pycache__/
 venv/
 venv312/
 .ipynb_checkpoints/
+.coverage
+.pytest_cache/
+
