@@ -5,10 +5,12 @@ import pytest
 from sqlalchemy import create_engine, text
 from sqlalchemy.pool import NullPool
 from schema import SCHEMA_SQL
-
+from pathlib import Path
 
 # pour ne pas toucher a la base principale, on cree une base test_db
-load_dotenv()
+root_dir = Path(__file__).parent.parent  # Remonte au répertoire racine
+env_path = root_dir / ".env"
+load_dotenv(dotenv_path=env_path)
 
 TEST_DB_USER = os.getenv("TEST_DB_USER") 
 TEST_DB_PASSWORD = os.getenv("TEST_DB_PASSWORD") 
