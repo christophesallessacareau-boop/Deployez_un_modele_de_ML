@@ -145,7 +145,7 @@ def predict_from_db(employee_id: int):
 
     # Supprimer la cible + created_at (pour enlever les mgs d'erreur)
     X = df.drop(columns=["a_quitte_l_entreprise", "created_at"])
-    prediction = int(model.predict(df)[0])
+    prediction = int(model.predict(X)[0])
 
 
     # Traçabilite
