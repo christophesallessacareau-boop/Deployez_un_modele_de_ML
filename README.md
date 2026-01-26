@@ -5,8 +5,7 @@ Cette application utilise un modèle pour faire des prédictions.
 Algorithme : Régression Logistique avec GridSearchCV  
 Preprocessing : Pipeline avec ColumnTransformer (encoders + RobustScaler)  
 Métrique : ROC-AUC  
-Validation : StratifiedKFold Cross-Validation  
-
+  
 # Installation  
 Pour récupérer le projet accessible sous  
 https://github.com/christophesallessacareau-boop/Deployez_un_modele_de_ML  
@@ -21,9 +20,11 @@ Créer un environnement virtuel sur Python 3.12:
 python -3.12 -m venv venv312  
 Activer l'environnement:  
 .\venv312\Scripts\Activate.ps1  
-Installer les dépendances: pip install -r requirements.txt  
-
-# Base de données
+Installer les dépendances:  
+pip install -r requirements.txt  
+pip install --prefer-binary -r requirements.txt  
+  
+  # Base de données
 une base de données, sécurisée avec un mot de passe confidentiel, pour éviter toute manipilation externe.  
 La base de données est crée manuellement sous Postgre SQL dans laquelle des tables vont êtres insérées:    
 une table de données en entrée de modèle  
@@ -45,14 +46,16 @@ Prédiction en temps réel
 Interface interactive avec Fast API  
 Modèle entraîné avec pipeline complet (preprocessing + modèle)
 
-# Utilisation de l'API FastSAPI:
+# Utilisation de l'API FastAPI:  
+Utilisation en local seulement (sera présentée lors de la soutenance).  
 Lancer l'API FastAPI: uvicorn api:app --reload   
 Ou bien via http://127.0.0.1:8000  
 Remplissez les champs avec les valeurs des features  
 Cliquez sur "Prédire"  
 Consultez les résultats et probabilités de démission  
-Ctrl+C pour arrêter l'application  
-exemples de choix pour la prédiction:  
+Ctrl+C pour arrêter l'application.  
+  
+  exemples de choix pour la prédiction:  
 1) cas d'un employé avec une probabilité de quitter l'entreprise:  
 {
   "satisfaction_employee_environnement": 0,
@@ -120,14 +123,22 @@ la base est PostgreSQL
 
 # Gradio: une alternative à FastAPI
 app.py contient une interface Gradio pour tester le modèle manuellement et obtenir une prédiction instantanée.  
-Option indépendante de l’API FastAPI  
-Lancement de Gradio en application locale:  
-python app.py  
-ou bien http://127.0.0.1:7860
+
+Lancement de Gradio sur le cloud Hugging Face (ouvert à tous):  
+
+cliquez sur https://huggingface.co/spaces/ChristopheSalles31/Deployez_un_modele_de_ML  
+cliquez ensuite en haut à droite sur App  
 indiquer les valeurs voulues pour chaque variable numérique  
 et lorsque c'est le cas, choisissez une valeur dans le Menu déroulant pour les variables contraintes.  
-Cliquez sur Prédire  
-Consultez les résultats et probabilités de démission.
+Cliquez sur Prédire
+Consultez les résultats et probabilités de démission:  
+si proba=1, le salarié est considéré comme partant;  
+si proba=0, le salarié est considéré comme restant.  
+
+Gradio peut aussi être utilisée en tant qu'application locale avec:  
+python app.py  
+ou bien http://127.0.0.1:7860
+
 
 
 # Technologies:
