@@ -21,7 +21,7 @@ python -3.12 -m venv venv312
 Activer l'environnement:  
 .\venv312\Scripts\Activate.ps1  
 Installer les dépendances:  
-pip install -r requirements.txt  
+pip install --upgrade pip  
 pip install --prefer-binary -r requirements.txt  
   
   # Base de données
@@ -50,6 +50,8 @@ Modèle entraîné avec pipeline complet (preprocessing + modèle)
 Utilisation en local seulement (sera présentée lors de la soutenance).  
 Lancer l'API FastAPI: uvicorn api:app --reload   
 Ou bien via http://127.0.0.1:8000  
+Documentation Swagger : http://127.0.0.1:8000/docs  
+
 Remplissez les champs avec les valeurs des features  
 Cliquez sur "Prédire"  
 Consultez les résultats et probabilités de démission  
