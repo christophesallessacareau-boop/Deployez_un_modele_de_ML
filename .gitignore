@@ -10,3 +10,4 @@ venv312/
 .coverage
 .pytest_cache/
 *.odp
+*.txt
