@@ -9,4 +9,4 @@ venv312/
 .ipynb_checkpoints/
 .coverage
 .pytest_cache/
-
+*.odp
