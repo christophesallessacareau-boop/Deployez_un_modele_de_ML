@@ -37,7 +37,7 @@ La table est crée avec SQLalchemy.
 # Tests du code
 Tests du code avec des tests unitaires et fonctionnels;  
 à chaque push et pull request Git / GitHub;  
-un environnemnt est crée à chaque test automatique;  
+un environnement est crée à chaque test automatique;  
 visibilité du bon fonctionnement du code avant déploiement;  
 traçage des erreurs
 
