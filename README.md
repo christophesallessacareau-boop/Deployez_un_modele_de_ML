@@ -1,3 +1,15 @@
+---
+title: Api Fastapi
+emoji: 🚀
+colorFrom: green
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
+
+
 # Application de Prédiction Machine Learning      
 Cette application utilise un modèle pour faire des prédictions.
 
