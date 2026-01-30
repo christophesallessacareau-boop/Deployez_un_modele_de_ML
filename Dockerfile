@@ -11,6 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copier le code de l'application et le modèle
 COPY main.py .
 COPY model.joblib .
+COPY ..
 
 # Exposer le port 7860 (port standard pour HF Spaces)
 EXPOSE 7860
