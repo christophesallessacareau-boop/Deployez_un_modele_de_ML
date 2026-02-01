@@ -14,20 +14,40 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          lfs: true  # Important pour les gros fichiers comme model.joblib
 
-      - name: Prepare clean git repo
+      - name: List files to be deployed
         run: |
-          rm -rf .git
-          git init
-          git config user.email "actions@github.com"
-          git config user.name "github-actions"
-          git add .
-          git commit -m "Deploy FastAPI app"
+          echo "Files that will be deployed:"
+          ls -la
+          echo ""
+          echo "Checking critical files:"
+          test -f requirements.txt && echo "✅ requirements.txt found" || echo "❌ requirements.txt MISSING"
+          test -f main.py && echo "✅ main.py found" || echo "❌ main.py MISSING"
+          test -f model.joblib && echo "✅ model.joblib found" || echo "❌ model.joblib MISSING"
+          test -f Dockerfile && echo "✅ Dockerfile found" || echo "❌ Dockerfile MISSING"
 
       - name: Push to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_SPACE_REPO: ${{ vars.HF_SPACE_REPO }}
         run: |
-          git remote add hf https://user:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE_REPO}
-          git push hf HEAD:main --force
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          
+          # Cloner le Space HF
+          git clone https://huggingface.co/spaces/${HF_SPACE_REPO} hf_space
+          
+          # Copier les fichiers nécessaires
+          cp requirements.txt hf_space/
+          cp main.py hf_space/
+          cp model.joblib hf_space/
+          cp Dockerfile hf_space/
+          cp README.md hf_space/ 2>/dev/null || echo "README.md not found, skipping"
+          
+          # Pusher vers HF
+          cd hf_space
+          git add .
+          git commit -m "Deploy from GitHub Actions" || echo "No changes to commit"
+          git push https://user:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE_REPO} main
