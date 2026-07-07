@@ -64,6 +64,9 @@ Lancer l'API FastAPI: uvicorn api:app --reload
 Ou bien via http://127.0.0.1:8000  
 Documentation Swagger : http://127.0.0.1:8000/docs  
 
+N.B: l'API est disponible directement grâce à **Hugging Face Spaces**:  
+https://christophesalles31-api-fastapi.hf.space/docs 
+  
 Remplissez les champs avec les valeurs des features  
 Cliquez sur "Prédire"  
 Consultez les résultats et probabilités de démission  
