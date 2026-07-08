@@ -1,10 +1,11 @@
 ---
-title: Api Fastapi
+title: Api Fastapi: prediction turnover de salariés
 emoji: 🚀
 colorFrom: green
 colorTo: blue
 sdk: docker
 app_port: 7860
+base_path: /docs
 pinned: false
 ---
 
