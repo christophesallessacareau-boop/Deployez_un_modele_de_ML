@@ -1,5 +1,5 @@
 ---
-title: Api Fastapi: prediction turnover de salariés
+title: Api Fastapi pour predire le turnover de salariés
 emoji: 🚀
 colorFrom: green
 colorTo: blue
